@@ -14,7 +14,7 @@ var animate = window.requestAnimationFrame ||
 //render the 2d canvas
 var canvas = document.createElement('canvas');
 var width = 600;
-var height = 400;
+var height = 500;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
@@ -24,8 +24,14 @@ var player = new Player();
 var computer = new Computer();
 var ball = new Ball(300, 200);
 
+//game vars
+var leftScore = 0;
+var rightScore = 0;
+
 //starts the program
 window.onload = function() {
+    leftScore = 0;
+    rightScore = 0;
     document.body.appendChild(canvas);
     animate(step);
 }
@@ -37,7 +43,7 @@ var step = function(){
     animate(step);
 }
 
-//Todo
+//updatess objects
 var update = function() {
     player.update();
     computer.update(ball);
@@ -48,22 +54,33 @@ var update = function() {
 var render = function() {
     //fills rectangle with grey
     context.fillStyle = "#D3D3D3";
-    context.fillRect(0, 0, width, height);
+    context.fillRect(0, 0, width, height-100);
 
     //draws solid circle in center and rect around edge
     context.beginPath();
     context.strokeStyle="#FF0000";
     context.setLineDash([]);
     context.arc(300, 200, 100, 0, 2*Math.PI);
-    context.strokeRect(0, 0, width, height);
+    context.strokeRect(0, 0, width, height-100);
     context.stroke();
 
     //draws dashed line in middle
     context.beginPath();
     context.setLineDash([5, 10]);
     context.moveTo(width/2, 0);
-    context.lineTo(width/2, height);
+    context.lineTo(width/2, height-100);
     context.stroke();
+
+    //draws scoreboard layout
+    context.beginPath();
+    context.setLineDash([]);
+    context.strokeRect(0, 0, width, height);
+    context.strokeStyle="#000000";
+    context.font = "40px Arial";
+    context.strokeText("Computer", 20, height - 40);
+    context.strokeText("Player", width - 150, height - 40);
+    //context.strokeText(leftScore, 105, height - 50);
+    //context.strokeText(rightScore, width-100, height - 50);
 
     //renders objects
     player.render();
@@ -204,6 +221,10 @@ Ball.prototype.update = function(paddle1, paddle2) {
 
     //detects if the ball has scored
     if(this.x < 0 || this.x > 600){
+        if(this.x < 0)
+            document.getElementById("score").innerHTML = "Score " + leftScore + " : " + rightScore++;
+        else
+            document.getElementById("score").innerHTML = "Score " + leftScore++ + " : " + rightScore;
         this.x_speed = 3;
         this.y_speed = 0;
         this.x = 300;
