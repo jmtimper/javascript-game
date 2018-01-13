@@ -1,3 +1,10 @@
+/**
+ * Basic pong game
+ * Sources: https://robots.thoughtbot.com/pong-clone-in-javascript
+ * @Author Jeremy Timperio
+ * @type {((callback: FrameRequestCallback) => number) | * | Function}
+ */
+
 //request animation frame that runs the game at 60fps
 var animate = window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
@@ -33,6 +40,7 @@ var step = function(){
 //Todo
 var update = function() {
     player.update();
+    computer.update(ball);
     ball.update(player.paddle, computer.paddle);
 };
 
@@ -120,6 +128,22 @@ Player.prototype.update = function(){
         }
     }
 };
+
+Computer.prototype.update = function(ball){
+    var ball_y = ball.y;
+    var diff = -((this.paddle.y + (this.paddle.height / 2)) - ball_y);
+    if(diff < -4){
+        diff = -5;
+    } else if(diff > 4){
+        diff = 5;
+    }
+    this.paddle.move(0, diff);
+    if(this.paddle.y < 0){
+        this.paddle.y = 0;
+    } else if (this.paddle.y + this.paddle.height > 400) {
+        this.paddle.y = 400 - this.paddle.height;
+    }
+}
 
 //moves the paddle based on the update function
 Paddle.prototype.move = function(x, y) {
