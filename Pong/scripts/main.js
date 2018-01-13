@@ -188,7 +188,7 @@ Ball.prototype.update = function(paddle1, paddle2) {
 
     //detects if the ball hits a paddle
     if(top_x > 300){
-        if(top_y < (paddle1.x + paddle1.width) && bottom_y > paddle1.y && top_x < (paddle1.x + paddle1.width) && bottom_x > paddle1.x) {
+        if(top_y < (paddle1.y + paddle1.height) && bottom_y > paddle1.y && top_x < (paddle1.x + paddle1.width) && bottom_x > paddle1.x) {
             this.x_speed = -3;
             this.y_speed += (paddle1.y_speed / 2);
             this.x += this.x_speed;
