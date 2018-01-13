@@ -36,8 +36,26 @@ var update = function() {
 
 //render canvas based on vars
 var render = function() {
-    context.fillStyle = "#FF0000";
+    //fills rectangle with grey
+    context.fillStyle = "#D3D3D3";
     context.fillRect(0, 0, width, height);
+
+    //draws solid circle in center and rect around edge
+    context.beginPath();
+    context.strokeStyle="#FF0000";
+    context.setLineDash([]);
+    context.arc(300, 200, 100, 0, 2*Math.PI);
+    context.strokeRect(0, 0, width, height);
+    context.stroke();
+
+    //draws dashed line in middle
+    context.beginPath();
+    context.setLineDash([5, 10]);
+    context.moveTo(width/2, 0);
+    context.lineTo(width/2, height);
+    context.stroke();
+
+    //renders objects
     player.render();
     computer.render();
     ball.render();
