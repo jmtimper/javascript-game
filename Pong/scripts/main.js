@@ -12,6 +12,11 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 
+//build objects for game
+var player = new Player();
+var computer = new Computer();
+var ball = new Ball(200, 300);
+
 //starts the program
 window.onload = function() {
     document.body.appendChild(canvas);
@@ -33,4 +38,60 @@ var update = function() {
 var render = function() {
     context.fillStyle = "#FF0000";
     context.fillRect(0, 0, width, height);
+    player.render();
+    computer.render();
+    ball.render();
+}
+
+//creates paddle object taking in position, width, and height
+function Paddle(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.x_speed = 0;
+    this.y_speed = 0;
+}
+
+//renders paddle object
+Paddle.prototype.render = function() {
+    context.fillStyle = "#0000FF";
+    context.fillRect(this.x, this.y, this.width, this.height);
+}
+
+//creates the player paddle
+function Player() {
+    this.paddle = new Paddle(175, 850, 50 ,10);
+}
+
+//creates the computer paddle
+function Computer() {
+     this.paddle = new Paddle(175, 10, 50, 10);
+}
+
+//render plater paddle
+Player.prototype.render = function() {
+    this.paddle.render();
+}
+
+//render computer paddle
+Computer.prototype.render = function(){
+    this.paddle.render();
+}
+
+//creates ball object
+function Ball(x, y) {
+    this.x = x;
+    this.y = y;
+    this.x_speed = 0;
+    this.y_speed = 3;
+    this.radius = 5;
+}
+
+//renders ball object
+Ball.prototype.render = function(){
+    context.beginPath();
+    context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
+    context.fillStyle = "#000000";
+    context.fill();
 }
