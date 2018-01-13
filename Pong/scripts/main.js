@@ -15,7 +15,7 @@ var context = canvas.getContext('2d');
 //build objects for game
 var player = new Player();
 var computer = new Computer();
-var ball = new Ball(200, 300);
+var ball = new Ball(300, 200);
 
 //starts the program
 window.onload = function() {
@@ -61,12 +61,12 @@ Paddle.prototype.render = function() {
 
 //creates the player paddle
 function Player() {
-    this.paddle = new Paddle(175, 850, 50 ,10);
+    this.paddle = new Paddle(580, 170, 10 ,50);
 }
 
 //creates the computer paddle
 function Computer() {
-     this.paddle = new Paddle(175, 10, 50, 10);
+     this.paddle = new Paddle(10, 170, 10, 50);
 }
 
 //render plater paddle
