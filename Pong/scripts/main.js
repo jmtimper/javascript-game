@@ -32,6 +32,7 @@ var step = function(){
 
 //Todo
 var update = function() {
+    player.update();
     ball.update(player.paddle, computer.paddle);
 };
 
@@ -62,6 +63,19 @@ var render = function() {
     ball.render();
 }
 
+//keydown object that keeps track of the keys pressed
+var keysDown = {};
+
+//adds key to keydown object
+window.addEventListener("keydown", function(event) {
+    keysDown[event.keyCode] = true;
+});
+
+//deletes key from keydown object
+window.addEventListener("keyup", function(event) {
+    delete keysDown[event.keyCode];
+});
+
 //creates paddle object taking in position, width, and height
 function Paddle(x, y, width, height) {
     this.x = x;
@@ -91,6 +105,35 @@ function Computer() {
 //render plater paddle
 Player.prototype.render = function() {
     this.paddle.render();
+}
+
+//updates the paddle based on the keys pressed
+Player.prototype.update = function(){
+    for(var key in keysDown){
+        var value = Number(key);
+        if(value == 38){ // up arrow
+            this.paddle.move(0, -4);
+        } else if(value == 40) { //down arrow
+            this.paddle.move(0,4);
+        } else {
+            this.paddle.move(0, 0);
+        }
+    }
+};
+
+//moves the paddle based on the update function
+Paddle.prototype.move = function(x, y) {
+    this.x += x;
+    this.y += y;
+    this.x_speed = x;
+    this.y_speed = y;
+    if(this.y < 0){
+        this.y = 0;
+        this.y_speed = 0;
+    } else if (this.y + this.height > 400) {
+        this.y = 400 - this.height;
+        this.y_speed = 0;
+    }
 }
 
 //render computer paddle
@@ -158,3 +201,5 @@ Ball.prototype.update = function(paddle1, paddle2) {
         }
     }
 }
+
+
