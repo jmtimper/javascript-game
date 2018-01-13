@@ -32,6 +32,7 @@ var step = function(){
 
 //Todo
 var update = function() {
+    ball.update(player.paddle, computer.paddle);
 };
 
 //render canvas based on vars
@@ -101,8 +102,8 @@ Computer.prototype.render = function(){
 function Ball(x, y) {
     this.x = x;
     this.y = y;
-    this.x_speed = 0;
-    this.y_speed = 3;
+    this.x_speed = 3;
+    this.y_speed = 0;
     this.radius = 5;
 }
 
@@ -112,4 +113,48 @@ Ball.prototype.render = function(){
     context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
     context.fillStyle = "#000000";
     context.fill();
+}
+
+//updates ball position based on speed
+Ball.prototype.update = function(paddle1, paddle2) {
+    this.x += this.x_speed;
+    this.y += this.y_speed;
+
+    //sets bounds for wall
+    var top_x = this.x - 5;
+    var top_y = this.y - 5;
+    var bottom_x = this.x + 5;
+    var bottom_y = this.y + 5;
+
+    //detects if the ball hits the floor or ceiling
+    if(this.y - 5 < 0 ) {
+        this.y = 5;
+        this.y_speed = -this.y_speed;
+    } else if (this.y + 5 > 400) {
+        this.y = 395;
+        this.y_speed = -this.y_speed;
+    }
+
+    //detects if the ball has scored
+    if(this.x < 0 || this.x > 600){
+        this.x_speed = 3;
+        this.y_speed = 0;
+        this.x = 300;
+        this.y = 200;
+    }
+
+    //detects if the ball hits a paddle
+    if(top_x > 300){
+        if(top_y < (paddle1.x + paddle1.width) && bottom_y > paddle1.y && top_x < (paddle1.x + paddle1.width) && bottom_x > paddle1.x) {
+            this.x_speed = -3;
+            this.y_speed += (paddle1.y_speed / 2);
+            this.x += this.x_speed;
+        }
+    } else {
+        if(top_y < (paddle2.y + paddle2.height) && bottom_y > paddle2.y && top_x < (paddle2.x + paddle2.width) && bottom_x > paddle2.x){
+            this.x_speed = 3;
+            this.y_speed += (paddle2.y_speed / 2);
+            this.x += this.x_speed;
+        }
+    }
 }
